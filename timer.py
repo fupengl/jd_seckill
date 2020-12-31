@@ -41,6 +41,13 @@ class Timer(object):
         """
         return self.local_time() - self.jd_time()
 
+    def is_expired(self):
+        """超过抢购时间结束进程"""
+        expired = self.local_time() > (self.buy_time_ms + 1000 * 60 * 5)
+        if expired:
+            print('抢购结束了')
+        return expired
+
     def start(self):
         logger.info('正在等待到达设定时间:{}，检测本地时间与京东服务器时间误差为【{}】毫秒'.format(self.buy_time, self.diff_time))
         while True:

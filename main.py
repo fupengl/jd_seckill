@@ -1,7 +1,6 @@
 import sys
 from jd_spider_requests import JdSeckill
 
-
 if __name__ == '__main__':
     a = """
 

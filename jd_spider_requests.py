@@ -5,6 +5,7 @@ import functools
 import json
 import os
 import pickle
+import sys
 
 from lxml import etree
 from jd_logger import logger
@@ -358,6 +359,7 @@ class JdSeckill(object):
                     self.submit_seckill_order()
             except Exception as e:
                 logger.info('抢购发生异常，稍后继续执行！', e)
+            self.safe_exit_process()
             wait_some_time()
 
     def make_reserve(self):
@@ -422,6 +424,11 @@ class JdSeckill(object):
         sku_title = x_data.xpath('/html/head/title/text()')
         return sku_title[0]
 
+    def safe_exit_process(self):
+        """超过抢购时间结束进程"""
+        if self.timers.is_expired():
+            sys.exit(0)
+
     def get_seckill_url(self):
         """获取商品的抢购链接
         点击"抢购"按钮后，会有两次302跳转，最后到达订单结算页面
@@ -454,6 +461,7 @@ class JdSeckill(object):
                 return seckill_url
             else:
                 logger.info("抢购链接获取失败，稍后自动重试")
+                self.safe_exit_process()
                 wait_some_time()
 
     def request_seckill_url(self):
