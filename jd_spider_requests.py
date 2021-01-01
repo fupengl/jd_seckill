@@ -357,6 +357,7 @@ class JdSeckill(object):
                 while True:
                     self.request_seckill_checkout_page()
                     self.submit_seckill_order()
+                    self.safe_exit_process()
             except Exception as e:
                 logger.info('抢购发生异常，稍后继续执行！', e)
             self.safe_exit_process()
